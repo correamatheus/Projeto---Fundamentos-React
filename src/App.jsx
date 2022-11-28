@@ -28,7 +28,7 @@ const posts = [
   {
       id: 2,
       author: {
-          avatarUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQH43tM4qwb4yQ/profile-displayphoto-shrink_200_200/0/1620953241453?e=1674691200&v=beta&t=W21cRynn4Kaw8R0CNKYfL6Shcp2VqapLMvotSdqcmIM",
+          avatarUrl: "https://media-exp1.licdn.com/dms/image/C4E03AQFwtD3lYzTsIw/profile-displayphoto-shrink_100_100/0/1538543889839?e=1675296000&v=beta&t=-BOQ1-fiOXGJCnjwOTTBHPJeNu6qcAIr8Fl88pd29Ik",
           name: 'Edivaldo Correa',
           role: 'Gerente Comercial @ Dunamis'
       },
@@ -51,7 +51,7 @@ function App() {
             <Post 
               author={post.author}
               content={post.content}
-              publishedAt={post.content}
+              publishedAt={post.publishedAt}
             />
             )
           })}
