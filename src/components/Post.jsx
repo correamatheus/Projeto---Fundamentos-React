@@ -10,13 +10,15 @@ import { useState } from 'react';
 
 
 
-export function Post({author, publishedAt, content}) {
+export function Post({ author, publishedAt, content }) {
 
     const [comments, setComments] = useState([
         "Um post bacana!!!"
     ]);
 
-    const publishedDateFormated = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {locale: ptBr})
+    const [newCommentText, setNewCommentText] = useState('');
+
+    const publishedDateFormated = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", { locale: ptBr })
     const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
         locale: ptBR,
         addSuffix: true,
@@ -24,20 +26,32 @@ export function Post({author, publishedAt, content}) {
     });
 
 
-    function handleCreateNewComment(){
+    function handleCreateNewComment() {
         event.preventDefault();
-        const nextCommentText = event.target.comment.value;        
-        setComments([...comments, nextCommentText]);
+        setComments([...comments, newCommentText]);
+        setNewCommentText('');
+    }
+
+    function handleNewCommentChange() {
+        setNewCommentText(event.target.value);
+    }
+
+    function deleteComment(commentToDelete) {
+        const commentsWithoutDeletedOne = comments.filter(comment => {
+            return comment != commentToDelete;
+        });
+        
+       setComments(commentsWithoutDeletedOne);
     }
 
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar 
-                        hasBorder={true} 
+                    <Avatar
+                        hasBorder={true}
                         src={author.avatarUrl}
-                    />                    
+                    />
                     <div className={styles.authorInfo}>
                         <strong>{author.name}</strong>
                         <span>{author.role}</span>
@@ -48,11 +62,10 @@ export function Post({author, publishedAt, content}) {
 
             <div className={styles.content}>
                 {content.map(line => {
-                    if (line.type == 'parapraph')
-                    {
-                        return <p>{line.content}</p>
+                    if (line.type == 'parapraph') {
+                        return <p key={line.content}>{line.content}</p>
                     } else {
-                        return <p><a>{line.content}</a></p>
+                        return <p key={line.content}><a>{line.content}</a></p>
                     }
                 })}
             </div>
@@ -62,6 +75,8 @@ export function Post({author, publishedAt, content}) {
                 <textarea
                     name="comment"
                     placeholder='Deixe um comentário'
+                    value={newCommentText}
+                    onChange={handleNewCommentChange}
                 />
 
                 <footer>
@@ -72,7 +87,11 @@ export function Post({author, publishedAt, content}) {
 
             <div className={styles.commentList}>
                 {comments.map(comment => {
-                    return <Comment content={comment}/>
+                    return (<Comment
+                        onDeleteComment={deleteComment}
+                        key={comment}
+                        content={comment}
+                    />)
                 })}
             </div>
         </article>
